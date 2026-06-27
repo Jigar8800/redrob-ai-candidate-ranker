@@ -1,0 +1,103 @@
+# Redrob Hackathon — Submission Metadata Template
+#
+# Copy this file to your repo root as `submission_metadata.yaml` and fill it in.
+# The fields here should match what you submit via the portal at upload time.
+# Stage 3 review uses this file to verify your portal metadata.
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "Drkhack"  
+
+primary_contact:
+  name: "Jigar Maturkar"
+  email: "jigarmaturkar32@gmail.com"
+  phone: "+91 9909827844"
+
+team_members:
+  - name: "Jigar Maturkar"
+    email: "jigarmaturkar32@gmail.com"
+    role: "Team Leader"
+  - name: "Makwana Kartik"
+    email: "makwanakartik137@gmail.com"
+    role: "Data Analysis"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/Jigar8800/redrob-ai-candidate-ranker.git" 
+# Required. Must be reachable. Private repos OK if you can grant organizer
+# access at Stage 3 (the email to add will be communicated then).
+
+sandbox_link: "https://huggingface.co/spaces/jigarm80/drkhack-redrob-ranker"
+sandbox_box: "https://jigarm80-drkhack-redrob-ranker.hf.space" 
+
+reproduce_command: "python rank_candidates.py --input candidates.jsonl --output submission.csv"
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local Linux / Windows Laptop"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.11"
+  os: "Windows 11 / Ubuntu 22.04"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: false
+  pre_computation_time_minutes: 0
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+# Transparency only — declared use is NOT penalized. Be honest. Stage 5 interview
+# may verify these declarations against your code; declarations that contradict
+# your code or your interview are flagged.
+ai_tools_used:
+  - "Antigravity"
+  - "Claude"
+  - "Grok (xAI)"
+  - "GitHub Copilot"
+
+ai_usage_summary: |
+  Primary development was done in Antigravity (main coding environment) with heavy assistance from Grok (xAI) and Claude.
+  
+  - Grok was used extensively for overall architecture design, advanced scoring logic, honeypot detection heuristics, dynamic reasoning generator, and iterative improvements to the ranking system.
+  - Claude was primarily used for code review, refactoring suggestions, and detailed feedback on reasoning quality to ensure Stage 4 compliance.
+  - GitHub Copilot was used for code completion and boilerplate.
+  - Antigravity served as the main IDE/environment for writing, testing, and debugging the entire solution.
+  
+  No raw candidate data was ever fed into any LLM. All core scoring components, keyword sets, penalty rules, and reasoning templates were designed manually with AI assistance only for refinement and review. The final implementation reflects significant original engineering work.
+
+# ============================================================================
+# Approach summary (optional but recommended)
+# ============================================================================
+methodology_summary: |
+  Deterministic rule-based ranker with five scoring components:
+    (1) Career Match [0.42] — classifies roles into Tier 1 (explicit ML/AI/Search
+    titles), Tier 2 (Backend/Data with ≥3 retrieval/LLM keyword matches in
+    descriptions), or Tier 3 (generic). Uses log-scaled unique keyword counts
+    across three semantic groups (IR, LLM, Production) to prevent keyword stuffing.
+    (2) Skills Relevance [0.18] — relevance × proficiency × log(1+endorsements) ×
+    duration factor, with platform assessment verification multiplier.
+    (3) Behavioral [0.22] — recruiter response rate, last-active recency, location
+    alignment, GitHub activity, recruiter saves, notice period modifier.
+    (4) Experience+Education [0.10] — optimal YoE band (5–9 yr), Tier-1/2 prestige.
+    (5) Honeypot/Trap Penalty [up to -0.10] — detects impossible date math,
+    single role exceeding total YoE, expert skills with zero duration, skill count
+    anomalies, and pure consulting histories.
+    Reasoning is generated from atomic profile facts (exact YoE, title, company,
+    named skills, signal values) with 5 rotating phrasings per signal type and
+    honest concerns stated for every flagged candidate. Runtime: ~60s for 100K
+    profiles on a single CPU core.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true        
